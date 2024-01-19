@@ -191,6 +191,8 @@ namespace SNAKE_AND_LADDERS
                     Console.WriteLine($"Chance : {chance}");
                 }
             } while (player_position < 100);
+            Console.WriteLine($"No of Times Dice rolled : {dierolls}");
+            Console.ReadKey();
         }
     }
 }
