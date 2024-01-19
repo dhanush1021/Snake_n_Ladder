@@ -62,6 +62,7 @@ namespace SNAKE_AND_LADDERS
         static void Main(string[] args)
         {
             Random random = new Random();
+            int player_position = 0;
             string str;
             dice die = new dice();
             do
