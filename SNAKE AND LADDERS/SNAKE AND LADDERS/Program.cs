@@ -135,6 +135,8 @@ namespace SNAKE_AND_LADDERS
             Random random = new Random();
             int player_position = 1;
             int chance = 0;
+            int dierolls = 0;
+            List<int> list = new List<int> { 20, 30, 40, 50 };
             Console.WriteLine($"Player Position : {player_position}");
             dice die = new dice();
             int[,] ladder_snake_noplay=die.Ladder_Snake_Noplay();
@@ -146,26 +148,25 @@ namespace SNAKE_AND_LADDERS
                 Console.ReadKey();
                 int val = random.Next(6) + 1;
                 die.roll(val);
-                if (chance == 0)
+                dierolls++;
+                if (chance == 0 && player_position+val<=100)
                 player_position += val;
                 else 
                     chance= 0;
                 Console.WriteLine($"Player Position : {player_position}");
                 if (snake.Contains(player_position))
                 {
-                    int snake_container;
-                    do
-                    {
-                        snake_container = random.Next(10, 30);
-                    } while (player_position - snake_container < 0);
-                    Console.WriteLine(snake_container);
-                    player_position -= snake_container;
+                    int snake_container= random.Next(20, 40);
+                    if (player_position - snake_container < 0)
+                        player_position = 0;
+                    else
+                        player_position -= snake_container;
                     Console.WriteLine($"Snake : {snake_container}");
                     Console.WriteLine(" ( ) ");
                     Console.WriteLine("  \\  ");
                     Console.WriteLine("  /  ");
                     Console.WriteLine("  \\  ");
-                    Console.WriteLine("   / ");
+                    Console.WriteLine("  / ");
                     Console.WriteLine($"Player Position : {player_position}");
                 }
                 else if (ladder.Contains(player_position))
@@ -173,11 +174,11 @@ namespace SNAKE_AND_LADDERS
                     int ladder_container;
                     do
                     {
-                        ladder_container = random.Next(10, 30);
-                    } while (player_position + ladder_container > 100);
-                    player_position += ladder_container;
-                    Console.WriteLine($"Ladder : {ladder_container}");
-                    Console.WriteLine("|-|  ");
+                        ladder_container = random.Next(4);
+                    } while (player_position + list[ladder_container] > 100);
+                    player_position += list[ladder_container];
+                    Console.WriteLine($"Ladder : {list[ladder_container]}");
+                    Console.WriteLine("|-|");
                     Console.WriteLine("|-|");
                     Console.WriteLine("|-|");
                     Console.WriteLine("|-|");
