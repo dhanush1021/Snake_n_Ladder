@@ -56,6 +56,50 @@ namespace SNAKE_AND_LADDERS
                     break;
             }
         }
+        public int[,] Ladder_Snake_Noplay()
+        {
+            int[,] ladder_snake_noplay = new int[3, 7];
+            Random random = new Random();
+            HashSet<int> set = new HashSet<int>();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    int val;
+                    if (i == 0)
+                    {
+                        do
+                        {
+                            val = random.Next(20, 101);
+                            if (!set.Contains(val))
+                                set.Add(val);
+                        } while (!set.Contains(val));
+                        ladder_snake_noplay[i, j] = val;
+                    }
+                    else if (i == 1)
+                    {
+                        do
+                        {
+                            val = random.Next(1, 81);
+                            if (!set.Contains(val))
+                                set.Add(val);
+                        } while (!set.Contains(val));
+                        ladder_snake_noplay[i, j] = val;
+                    }
+                    else if (i == 2)
+                    {
+                        do
+                        {
+                            val = random.Next(1, 101);
+                            if (!set.Contains(val))
+                                set.Add(val);
+                        } while (!set.Contains(val));
+                        ladder_snake_noplay[i, j] = val;
+                    }
+                }
+            }
+            return ladder_snake_noplay;
+        }
     }
     internal class Program
     {
@@ -65,13 +109,23 @@ namespace SNAKE_AND_LADDERS
             int player_position = 0;
             string str;
             dice die = new dice();
+            int[,] ladder_snake_noplay=die.Ladder_Snake_Noplay();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    Console.Write($"{ladder_snake_noplay[i, j]} ");
+                }
+                Console.WriteLine();
+            }
             do
             {
-                int val = random.Next(5) + 1;
+                
+                int val = random.Next(6) + 1;
                 die.roll(val);
                 Console.WriteLine("Do you want to play ?");
                 str = Console.ReadLine();
-            } while (str == "Yes");
+            } while (str == "y");
         }
     }
 }
