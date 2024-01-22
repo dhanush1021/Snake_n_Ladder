@@ -1,14 +1,85 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SNAKE_AND_LADDERS
+namespace Snake_and_Ladder_2Players
 {
-    class dice
+    public class Obstacles
     {
-        public void roll(int val)
+        public int[,] ladder_snakes_noplay()
+        {
+            int[,] ladder_snakes_and_noplay = new int[3, 7];
+            HashSet<int> set = new HashSet<int>();
+            Random random = new Random();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    int val;
+                    if (i == 0)
+                    {
+                        do
+                        {
+                            val = random.Next(1, 81);
+                            if (!set.Contains(val))
+                                set.Add(val);
+                        } while (!set.Contains(val));
+                        ladder_snakes_and_noplay[i, j] = val;
+                    }
+                    else if (i == 1)
+                    {
+                        do
+                        {
+                            val = random.Next(21, 101);
+                            if (!set.Contains(val))
+                                set.Add(val);
+                        } while (!set.Contains(val));
+                        ladder_snakes_and_noplay[i, j] = val;
+                    }
+                    else if (i == 2)
+                    {
+                        do
+                        {
+                            val = random.Next(1, 100);
+                            if (!set.Contains(val))
+                                set.Add(val);
+                        } while (!set.Contains(val));
+                        ladder_snakes_and_noplay[i, j] = val;
+                    }
+                }
+            }
+            return ladder_snakes_and_noplay;
+        }
+        public int[] Ladder(int[,] ladder_snakes_and_noplay)
+        {
+            int[] ladder = new int[7];
+            for (int i = 0; i < ladder_snakes_and_noplay.GetLength(1); i++)
+            {
+                ladder[i] = ladder_snakes_and_noplay[0, i];
+            }
+            return ladder;
+        }
+        public int[] Snakes(int[,] ladder_snakes_and_noplay)
+        {
+            int[] snakes = new int[7];
+            for (int i = 0; i < ladder_snakes_and_noplay.GetLength(1); i++)
+            {
+                snakes[i] = ladder_snakes_and_noplay[1, i];
+            }
+            return snakes;
+        }
+        public int[] Noplay(int[,] ladder_snakes_and_noplay)
+        {
+            int[] noplay = new int[7];
+            for (int i = 0; i < ladder_snakes_and_noplay.GetLength(1); i++)
+            {
+                noplay[i] = ladder_snakes_and_noplay[2, i];
+            }
+            return noplay;
+        }
+        public void Dice(int val)
         {
             switch (val)
             {
@@ -56,143 +127,136 @@ namespace SNAKE_AND_LADDERS
                     break;
             }
         }
-        public int[,] Ladder_Snake_Noplay()
+    }
+
+    public class Players : Obstacles
+    {
+        public int player;
+        public Players()
         {
-            int[,] ladder_snake_noplay = new int[3, 7];
-            Random random = new Random();
-            HashSet<int> set = new HashSet<int>();
-            for (int i = 0; i < 3; i++)
+            this.player = 1;
+        }
+        public int player_position(int[] ladder, int[] snakes, int val, Random rand)
+        {
+            List<int> list = new List<int> { 20, 30, 40, 50 };
+            if (this.player + val <= 100)
             {
-                for (int j = 0; j < 7; j++)
+                this.player += val;
+                if (ladder.Contains(this.player))
                 {
-                    int val;
-                    if (i == 0)
+                    int increment = list[rand.Next(0, list.Count)];
+                    do
                     {
-                        do
-                        {
-                            val = random.Next(20, 101);
-                            if (!set.Contains(val))
-                                set.Add(val);
-                        } while (!set.Contains(val));
-                        ladder_snake_noplay[i, j] = val;
-                    }
-                    else if (i == 1)
-                    {
-                        do
-                        {
-                            val = random.Next(1, 81);
-                            if (!set.Contains(val))
-                                set.Add(val);
-                        } while (!set.Contains(val));
-                        ladder_snake_noplay[i, j] = val;
-                    }
-                    else if (i == 2)
-                    {
-                        do
-                        {
-                            val = random.Next(1, 101);
-                            if (!set.Contains(val))
-                                set.Add(val);
-                        } while (!set.Contains(val));
-                        ladder_snake_noplay[i, j] = val;
-                    }
+                        if (this.player + increment <= 100)
+                            this.player += increment;
+                        increment = list[rand.Next(0, list.Count)];
+                    } while (this.player + increment > 100);
+
+                    Console.WriteLine($"Ladder : {increment}");
+                    Console.WriteLine("|-|");
+                    Console.WriteLine("|-|");
+                    Console.WriteLine("|-|");
+                    Console.WriteLine("|-|");
                 }
+                else if (snakes.Contains(this.player))
+                {
+                    int minus = rand.Next(20, 41);
+                    this.player -= minus;
+                    if (this.player < 0)
+                    {
+                        this.player = 0;
+                    }
+                    Console.WriteLine($"Snake : {minus}");
+                    Console.WriteLine(" ( ) ");
+                    Console.WriteLine("  \\ ");
+                    Console.WriteLine("  /  ");
+                    Console.WriteLine("  \\ ");
+                    Console.WriteLine("  /  ");
+                }
+
             }
-            return ladder_snake_noplay;
-        }
-        public int[] snake_array(int[,] list)
-        {
-            int[] snake = new int[7];
-            for (int i = 0; i < list.GetLength(1); i++)
-            {
-                snake[i] = list[0, i];
-            }
-            return snake;
-        }
-        public int[] ladder_array(int[,] list)
-        {
-            int[] ladder = new int[7];
-            for (int i = 0; i < list.GetLength(1); i++)
-            {
-                ladder[i] = list[1, i];
-            }
-            return ladder;
-        }
-        public int[] noplay_array(int[,] list)
-        {
-            int[] noplay = new int[7];
-            for (int i = 0; i < list.GetLength(1); i++)
-            {
-                noplay[i] = list[0, i];
-            }
-            return noplay;
+            return this.player;
         }
     }
     internal class Program
     {
         static void Main(string[] args)
         {
-            Random random = new Random();
-            int player_position = 1;
-            int chance = 0;
-            int dierolls = 0;
-            List<int> list = new List<int> { 20, 30, 40, 50 };
-            Console.WriteLine($"Player Position : {player_position}");
-            dice die = new dice();
-            int[,] ladder_snake_noplay=die.Ladder_Snake_Noplay();
-            int[] snake = die.snake_array(ladder_snake_noplay);
-            int[] ladder = die.ladder_array(ladder_snake_noplay);
-            int[] noplay = die.noplay_array(ladder_snake_noplay);
+            Players play1 = new Players();
+            Players play2 = new Players();
+            Obstacles obstacles = new Obstacles();
+            Random rand = new Random();
+            int[,] ladder_snakes_noplay = obstacles.ladder_snakes_noplay();
+            int[] ladder = obstacles.Ladder(ladder_snakes_noplay);
+            int[] snakes = obstacles.Snakes(ladder_snakes_noplay);
+            int[] noplay = obstacles.Noplay(ladder_snakes_noplay);
+            int player1 = 1;
+            int player2 = 1;
+            int chance = 1;
+            int val;
+            int chance1 = 0;
+            int chance2 = 0;
+            Console.WriteLine("Press Any Key To Start The Game ...");
+
             do
             {
                 Console.ReadKey();
-                int val = random.Next(6) + 1;
-                die.roll(val);
-                dierolls++;
-                if (chance == 0 && player_position+val<=100)
-                player_position += val;
-                else 
-                    chance= 0;
-                Console.WriteLine($"Player Position : {player_position}");
-                if (snake.Contains(player_position))
+                if (chance == 1)
                 {
-                    int snake_container= random.Next(20, 40);
-                    if (player_position - snake_container < 0)
-                        player_position = 0;
-                    else
-                        player_position -= snake_container;
-                    Console.WriteLine($"Snake : {snake_container}");
-                    Console.WriteLine(" ( ) ");
-                    Console.WriteLine("  \\  ");
-                    Console.WriteLine("  /  ");
-                    Console.WriteLine("  \\  ");
-                    Console.WriteLine("  / ");
-                    Console.WriteLine($"Player Position : {player_position}");
-                }
-                else if (ladder.Contains(player_position))
-                {
-                    int ladder_container;
-                    do
+                    Console.WriteLine();
+                    Console.WriteLine("Player 1");
+                    val = rand.Next(6) + 1;
+                    obstacles.Dice(val);
+                    if (chance1 == 0)
                     {
-                        ladder_container = random.Next(4);
-                    } while (player_position + list[ladder_container] > 100);
-                    player_position += list[ladder_container];
-                    Console.WriteLine($"Ladder : {list[ladder_container]}");
-                    Console.WriteLine("|-|");
-                    Console.WriteLine("|-|");
-                    Console.WriteLine("|-|");
-                    Console.WriteLine("|-|");
-                    Console.WriteLine("|-|");
-                    Console.WriteLine($"Player Position : {player_position}");
+                        player1 = play1.player_position(ladder, snakes, val, rand);
+                        if (noplay.Contains(player1))
+                        {
+                            chance1 = 1;
+                            Console.WriteLine($"Chance : {chance1}");
+                        }
+                    }
+
+                    else
+                    {
+                        chance1 = 0;
+                    }
+                    Console.WriteLine($"Player1 : {player1}");
+                    chance = 2;
                 }
-                else if (noplay.Contains(player_position))
+
+                else
                 {
+                    Console.WriteLine();
+                    Console.WriteLine("Player 2");
+                    val = rand.Next(6) + 1;
+                    obstacles.Dice(val);
+                    if (chance2 == 0)
+                    {
+                        player2 = play2.player_position(ladder, snakes, val, rand);
+                        if (noplay.Contains(player2))
+                        {
+                            chance2 = 1;
+                            Console.WriteLine($"Chance : {chance2}");
+                        }
+
+                    }
+                    else
+                    {
+                        chance2 = 0;
+                    }
+                    Console.WriteLine($"Player2 : {player2}");
                     chance = 1;
-                    Console.WriteLine($"Chance : {chance}");
                 }
-            } while (player_position < 100);
-            Console.WriteLine($"No of Times Dice rolled : {dierolls}");
-            Console.ReadKey();
+            } while (player1 < 100 && player2 < 100);
+            if (player1 == 100)
+            {
+                Console.WriteLine("Player 1 has Won the Game ...");
+            }
+            else
+            {
+                Console.WriteLine("Player 2 has Won the Game ...");
+            }
         }
     }
 }
